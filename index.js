@@ -1,7 +1,32 @@
-const express = require('express')
-const app = express()
-app.all('/', (req, res) => {
-    console.log("Just got a request!")
-    res.send('Yo!')
-})
-app.listen(process.env.PORT || 3000)
+//                       _oo0oo_
+//                      o8888888o
+//                      88" . "88
+//                      (| -_- |)
+//                      0\  =  /0
+//                    ___/`---'\___
+//                  .' \\|     |// '.
+//                 / \\|||  :  |||// \
+//                / _||||| -:- |||||- \
+//               |   | \\\  -  /// |   |
+//               | \_|  ''\---/''  |_/ |
+//               \  .-\__  '-'  ___/-. /
+//             ___'. .'  /--.--\  `. .'___
+//          ."" '<  `.___\_<|>_/___.' >' "".
+//         | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+//         \  \ `_.   \_ __\ /__ _/   .-` /  /
+//     =====`-.____`.___ \_____/___.-`___.-'=====
+//                       `=---='
+//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const server = require('./src/app.js');
+const { conn } = require('./src/db.js');
+const { ListDiets } = require('./src/controllers/dietControllers.js');
+require('dotenv').config();
+const PORT = process.env.PORT || 3001;
+
+// Syncing all the models at once.
+conn.sync({ alter: true }).then(() => {
+	server.listen(PORT, () => {
+		ListDiets().then(console.log('Tipos de dietas cargadas'));
+		console.log(`listening at port ${PORT} `); // eslint-disable-line no-console
+	});
+});
